@@ -25,7 +25,8 @@ class IotServer:
 print("-- IotServer --")
 iot = IotServer()
 iot.collect_data()
-iot.send_data("testdata")
-iot.get_commands_from_internets()
+# TODO send receive commands
+#iot.send_data("testdata")
+#iot.get_commands_from_internets()
 
 print("-- end --")
