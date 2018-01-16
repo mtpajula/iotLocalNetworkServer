@@ -1,3 +1,6 @@
+# do not load settings.json to internet
+settings.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
