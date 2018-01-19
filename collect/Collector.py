@@ -13,9 +13,6 @@ class Collector:
         ips = self.get_ip_list()
         self.find_iot_devices(ips)
 
-        print("=== devices ===")
-        self.list_devices()
-
     def get_ip_list(self):
         print("Collecting iot data")
         nm = nmap.PortScanner()
@@ -43,9 +40,11 @@ class Collector:
         else:
             self.devices.append(Device(ip, root))
 
-    def list_devices(self):
+    def __str__(self):
+        s = "\nCollector devices:\n"
         for d in self.devices:
-            print(d.__str__())
+            s += "\t" + d.__str__() + "\n"
+        return s
 
     def send_command(self, name, command):
         for d in self.devices:

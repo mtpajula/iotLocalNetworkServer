@@ -4,9 +4,10 @@ import json
 
 class Device:
 
-    name   = ""
-    task   = ""
-    type   = "none"
+    name     = ""
+    task     = ""
+    type     = "none"
+    messages = {}
 
     def __init__(self, ip, root = None):
         self.ip = ip
@@ -39,8 +40,12 @@ class Device:
         s += " (" + self.type + ")"
         return s
 
-    def receive_command(self, command):
+    def receive_command(self, category, command):
+        print("receive_command to " + self.name + ": " + category + ", " + command + ". no command found")
         return
+
+    def send_message(self, title, desc):
+        self.messages[title] = desc
 
 
 class onoffDevice(Device):
@@ -48,13 +53,19 @@ class onoffDevice(Device):
     switch = False
 
     def __init__(self, ip, root):
-        super().__init__(ip)
+        super().__init__(ip, root)
         self.type = "onoffDevice"
-        self.name = root["device"]
-        self.task = root["task"]
+        #self.name = root["device"]
+        #self.task = root["task"]
 
-    def get_state(self):
-        s = self.get_status()
+    def set(self, sw):
+        self.switch = sw
+        s = self.call(self.switch_str())
+        self.get_state(s)
+
+    def get_state(self, s = None):
+        if s == None:
+            s = self.get_status()
 
         if s["status"] == "off":
             self.switch = False
@@ -66,13 +77,23 @@ class onoffDevice(Device):
             return "on"
         return "off"
 
-    def receive_command(self, command):
+    def receive_command(self, category, command):
+
+        if category != "device":
+            print("receive_command to " + self.name + ": " + category + ", " + command + ". no category found")
+            return
+
         if command == "off":
-            print("TODO")
+            self.set(False)
         elif command == "on":
-            print("TODO")
+            self.set(True)
         elif command == "status":
-            print("TODO")
+            self.get_state()
+            self.send_message("device status", self.switch_str())
+        elif command == "info":
+            self.send_message("device info", self.__str__())
+        else:
+            super(onoffDevice, self).receive_command(category, command)
 
     def  __str__(self):
         s = super(onoffDevice, self).__str__()
