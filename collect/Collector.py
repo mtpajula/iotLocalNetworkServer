@@ -4,7 +4,8 @@ from .Device import *
 
 class Collector:
 
-    devices = []
+    devices  = []
+    filepath = "data/collector.json"
 
     def __init__(self, settings):
         self.s = settings
@@ -13,10 +14,28 @@ class Collector:
         ips = self.get_ip_list()
         self.find_iot_devices(ips)
 
+    def load(self):
+        if not self.s.is_file(self.filepath):
+            print("No saved collector data")
+            self.start()
+            return
+
+        data = self.s.read(self.filepath)
+
+        for d in data:
+            self.create_device(d["ip"], d["root"])
+
+    def save(self):
+        data = []
+        for d in self.devices:
+            data.append(d.get_dict())
+
+        self.s.write(self.filepath, data)
+
     def get_ip_list(self):
         print("Collecting iot data")
         nm = nmap.PortScanner()
-        nm.scan(self.s["ip_range"], arguments="-sP")
+        nm.scan(self.s.collector()["ip_range"], arguments="-sP")
         print(nm.all_hosts())
         return nm.all_hosts()
 
@@ -33,6 +52,8 @@ class Collector:
                 self.create_device(ip, out)
             else:
                 print("ip not valid iot device")
+
+        self.save()
 
     def create_device(self, ip, root):
         if root["task"] == "onoff":

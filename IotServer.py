@@ -6,11 +6,12 @@ from Settings import Settings
 
 class IotServerDevice(Device):
 
-    def __init__(self):
+    def __init__(self, collector):
         super().__init__("noip")
         self.type = "IOTLocalServer"
         self.name = "server"
         self.task = "server"
+        self.c    = collector
 
     def  __str__(self):
         s = "\nServer:\n\t" + super(IotServerDevice, self).__str__()
@@ -22,14 +23,16 @@ class IotServer:
     s = Settings()
 
     def __init__(self):
-        self.d = IotServerDevice()
         self.s.load("data/settings.json")
-        self.c = Collector(self.s.for_collector())
-        self.i = Internets(self.s.for_internets())
+        self.c = Collector(self.s)
+        self.i = Internets(self.s)
+
+        self.d = IotServerDevice(self.c)
         print(self.i)
 
     def collect_data(self):
-        self.c.start()
+        #self.c.start()
+        self.c.load()
         print(self.c)
         print(self.d)
 
@@ -54,8 +57,6 @@ iot.send_internets()
 
 
 # TODO filter internets commands
-# TODO save Collector result
-# TODO fix stuck Collector when testing ips
 
 #iot.send_data("testdata")
 #iot.get_commands_from_internets()

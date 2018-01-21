@@ -1,26 +1,52 @@
 # -*- coding: utf-8 -*-
 import json
 import os
+from pathlib import Path
 
 class Settings:
 
     data = {}
 
-    def for_collector(self):
+    def collector(self):
         return self.data["collector"]
 
-    def for_internets(self):
+    def internets(self):
         return self.data["internets"]
 
-    def load(self, filepath):
+    def is_file(self, filepath):
+        filepath = os.getcwd() + "/" + filepath
+        f = Path(filepath)
 
+        if f.is_file():
+            return True
+        return False
+
+
+    def load(self, filepath):
+        self.data = self.read(filepath)
+
+    def read(self, filepath):
         filepath = os.getcwd() + "/" + filepath
 
-        print ("Loading settings from:")
-        print(filepath)
+        print ("Reading from: " + filepath)
+
+        out = {}
 
         try:
             with open(filepath) as f:
-                self.data = json.load(f)
+                out = json.load(f)
+        except Exception as e:
+            print(str(e))
+
+        return out
+
+    def write(self, filepath, data):
+        filepath = os.getcwd() + "/" + filepath
+
+        print ("Writing to: " + filepath)
+
+        try:
+            with open(filepath, 'w') as f:
+                json.dump(data, f)
         except Exception as e:
             print(str(e))

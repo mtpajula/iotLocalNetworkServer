@@ -1,5 +1,6 @@
 # do not load settings.json to internet
 settings.json
+collector.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

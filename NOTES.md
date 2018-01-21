@@ -13,4 +13,5 @@ Asennus:
 
 Käyttö:
 
+    nmap -sP 192.168.1.100-200
     nm.scan("192.168.1.100-200", arguments="-sP")

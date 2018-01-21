@@ -8,6 +8,7 @@ class Device:
     task     = ""
     type     = "none"
     messages = {}
+    timeo    = 8
 
     def __init__(self, ip, root = None):
         self.ip = ip
@@ -25,7 +26,7 @@ class Device:
 
         try:
             req = urllib.request.Request(url)
-            r = urllib.request.urlopen(req).read()
+            r = urllib.request.urlopen(req, timeout = self.timeo).read()
             m = json.loads(r.decode('utf-8'))
             print(m)
             return m
@@ -33,6 +34,17 @@ class Device:
             print(str(e))
 
         return {}
+
+    def get_dict(self):
+        d = {
+                "ip"   : self.ip,
+                "root" : {
+                    "device" : self.name,
+                    "task"   : self.task
+                }
+            }
+        return d
+
 
     def __str__(self):
         s = " [" + self.ip + "] "

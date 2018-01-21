@@ -12,6 +12,7 @@ class Internets:
         self.get_devices()
 
     def get_devices(self):
+        self.messages.clear()
         dev_dict = self.devices.read_data()
 
         for d in dev_dict:
@@ -58,9 +59,9 @@ class APIelement:
 
     def create_get_request(self, params):
         params['controller'] = self.controller
-        params['app_id'] = self.s["app_id"]
+        params['app_id'] = self.s.internets()["app_id"]
 
-        s = self.s["address"]
+        s = self.s.internets()["address"]
         for key, value in params.items():
             if value != "":
                 s += key + "=" + value + "&"
