@@ -31,8 +31,8 @@ class IotServer:
         print(self.i)
 
     def collect_data(self):
-        #self.c.start()
-        self.c.load()
+        self.c.start()
+        #self.c.load()
         print(self.c)
         print(self.d)
 

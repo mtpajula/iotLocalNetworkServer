@@ -3,12 +3,19 @@
 #include <ESP8266WebServer.h>
 #include <ESP8266mDNS.h>
 
+// === SETTINGS
+// WLAN ssid and password
 const char* ssid = "...";
 const char* password = "...";
+// Device name
+const String devname = "esprelay01";
+// digital output pin number
+const int dev = 2;
+// ===
 
 ESP8266WebServer server(80);
 
-const int dev = 5;
+
 String devStatus = "off";
 
 String createJsonKeyValue(String key, String value) {
@@ -21,7 +28,7 @@ void sendJson(String str) {
 }
 
 void handleRoot() {
-  String str = createJsonKeyValue("device","nodeMCU");
+  String str = createJsonKeyValue("device", devname);
   str = str + "," + createJsonKeyValue("task","onoff");
   sendJson(str);
 }
