@@ -3,6 +3,7 @@ from collect.Collector import Collector
 from collect.Device import *
 from send.Internets import Internets
 from Settings import Settings
+from time import sleep
 
 class IotServerDevice(Device):
 
@@ -20,7 +21,8 @@ class IotServerDevice(Device):
 
 class IotServer:
 
-    s = Settings()
+    s    = Settings()
+    wait = 10
 
     def __init__(self):
         self.s.load("data/settings.json")
@@ -46,19 +48,30 @@ class IotServer:
         devices.append(self.d)
         self.i.get(devices)
 
+    def loop(self):
+        # TODO if new commands, loop faster
+        # TODO better print
+        # example: commands per dev?
+        # TODO collect devices once a day or in case of commands
+        while True:
+            sleep(self.wait)
+            self.run()
 
-print("-- IotServer --")
-iot = IotServer()
-iot.collect_data()
-#iot.d.send_message("testi","from server")
-#iot.send_internets()
-iot.get_internets()
-iot.send_internets()
+    def run(self):
+        print("-- IotServer --")
+        #self.collect_data()
+        #iot.d.send_message("testi","from server")
+        #iot.send_internets()
+        self.get_internets()
+        self.send_internets()
 
+        # TODO filter internets commands
 
-# TODO filter internets commands
+        #iot.send_data("testdata")
+        #iot.get_commands_from_internets()
+        print("-- end --")
 
-#iot.send_data("testdata")
-#iot.get_commands_from_internets()
-
-print("-- end --")
+if __name__ == '__main__':
+    print("-- IotServer --")
+    iot = IotServer()
+    iot.loop()
