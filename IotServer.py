@@ -7,46 +7,56 @@ from time import sleep
 
 class IotServerDevice(Device):
 
-    def __init__(self, collector):
+    def __init__(self):
         super().__init__("noip")
         self.type = "IOTLocalServer"
         self.name = "server"
         self.task = "server"
-        self.c    = collector
+
+        self.s    = Settings()
+        self.s.load("data/settings.json")
+        self.c    = Collector(self.s)
+        self.i    = Internets(self.s)
+        self.i.get_devices()
 
     def  __str__(self):
         s = "\nServer:\n\t" + super(IotServerDevice, self).__str__()
-        return s + "\n"
+        return s
+
+    def receive_command(self, category, command):
+
+        if command == "reset devices":
+            self.i.get_devices()
+            #self.c.start()
+            self.send_message("internet device reset", "devices: " + str(len(self.i.messages)))
+            self.send_message("iot device reset", "devices: " + str(len(self.c.devices)))
+        else:
+            super(IotServerDevice, self).receive_command(category, command)
 
 
 class IotServer:
 
-    s    = Settings()
     wait = 10
 
     def __init__(self):
-        self.s.load("data/settings.json")
-        self.c = Collector(self.s)
-        self.i = Internets(self.s)
-
-        self.d = IotServerDevice(self.c)
-        print(self.i)
+        print("\nIotServer init\n")
+        self.d = IotServerDevice()
 
     def collect_data(self):
-        self.c.start()
+        self.d.c.start()
         #self.c.load()
-        print(self.c)
+        print(self.d.c)
         print(self.d)
 
     def send_internets(self):
-        devices = self.c.devices
+        devices = self.d.c.devices
         devices.append(self.d)
-        self.i.send(devices)
+        self.d.i.send(devices)
 
     def get_internets(self):
-        devices = self.c.devices
+        devices = self.d.c.devices
         devices.append(self.d)
-        self.i.get(devices)
+        self.d.i.get(devices)
 
     def loop(self):
         # TODO if new commands, loop faster
@@ -58,7 +68,7 @@ class IotServer:
             self.run()
 
     def run(self):
-        print("-- IotServer --")
+        print("\nRun\n")
         #self.collect_data()
         #iot.d.send_message("testi","from server")
         #iot.send_internets()
@@ -69,9 +79,8 @@ class IotServer:
 
         #iot.send_data("testdata")
         #iot.get_commands_from_internets()
-        print("-- end --")
 
 if __name__ == '__main__':
     print("-- IotServer --")
     iot = IotServer()
-    iot.loop()
+    iot.run()

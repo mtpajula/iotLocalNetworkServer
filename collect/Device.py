@@ -53,8 +53,7 @@ class Device:
         return s
 
     def receive_command(self, category, command):
-        print("receive_command to " + self.name + ": " + category + ", " + command + ". no command found")
-        return
+        self.send_message("command not found",command)
 
     def send_message(self, title, desc):
         self.messages[title] = desc
@@ -67,8 +66,6 @@ class onoffDevice(Device):
     def __init__(self, ip, root):
         super().__init__(ip, root)
         self.type = "onoffDevice"
-        #self.name = root["device"]
-        #self.task = root["task"]
 
     def set(self, sw):
         self.switch = sw
@@ -90,10 +87,6 @@ class onoffDevice(Device):
         return "off"
 
     def receive_command(self, category, command):
-
-        if category != "device":
-            print("receive_command to " + self.name + ": " + category + ", " + command + ". no category found")
-            return
 
         if command == "off":
             self.set(False)

@@ -5,11 +5,11 @@ import json
 class Internets:
 
     messages = {}
+    ccat     = "command"
 
     def __init__(self, settings):
         self.s = settings
         self.devices = APIelement(self.s, "device")
-        self.get_devices()
 
     def get_devices(self):
         self.messages.clear()
@@ -20,6 +20,8 @@ class Internets:
             if "description" in d:
                 m.description = d["description"]
             self.messages[d["title"]] = m
+
+        print(self.__str__())
 
     def send(self, devices):
         print("sending messages")
@@ -36,7 +38,11 @@ class Internets:
             if d.name in self.messages:
                 data_dict = self.messages[d.name].read_data()
                 for c in data_dict:
+                    if c["title"] != self.ccat:
+                        continue
+
                     d.receive_command(c["title"], c["description"])
+                    self.messages[d.name].delete_data(c["id"])
 
     def __str__(self):
         s = "\nInternets devices:\n"
@@ -66,7 +72,7 @@ class APIelement:
             if value != "":
                 s += key + "=" + value + "&"
 
-        print(s)
+        #print(s)
         return s
 
 
@@ -84,6 +90,18 @@ class APIelement:
             }
 
         self.call(params)
+
+    def delete_data(self, id):
+        print("deleting data")
+
+        params = {
+                'action'     : 'delete',
+                'parent_id'  : self.parent_id,
+                'id'      : id
+            }
+
+        self.call(params)
+
 
     def read_data(self):
         print("reading data")
@@ -103,7 +121,7 @@ class APIelement:
             req = urllib.request.Request(url)
             r = urllib.request.urlopen(req).read()
             cont = json.loads(r.decode('utf-8'))
-            print(cont)
+            #print(cont)
             return cont
         except Exception as e:
             print(str(e))
