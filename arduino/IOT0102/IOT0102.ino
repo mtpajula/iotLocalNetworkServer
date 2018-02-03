@@ -225,6 +225,6 @@ void responseHeader(EthernetClient client) {
 }
 
 void defaultResponse(EthernetClient client) {
-  client.println("{}");
+  client.println("<html>empty</html>");
 }
 
