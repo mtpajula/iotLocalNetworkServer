@@ -7,7 +7,7 @@ from Settings import Settings
 class IotServerDevice(Device):
 
     def __init__(self):
-        super().__init__("noip")
+        super().__init__()
         self.type = "IOTLocalServer"
         self.name = "server"
         self.task = "server"
@@ -33,8 +33,8 @@ class IotServerDevice(Device):
 
         if command == "reset devices":
             self.i.get_devices()
-            self.collect_iot()
             self.send_message("internet device reset", "devices: " + str(len(self.i.messages)))
+            self.collect_iot()
             self.send_message("iot device reset", "devices: " + str(len(self.c.devices)+1))
         else:
             super(IotServerDevice, self).receive_command(category, command)

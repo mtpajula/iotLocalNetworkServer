@@ -13,6 +13,11 @@ class APIelement:
         if parent != None:
             self.parent_id = parent
 
+    def __str__(self):
+        s = self.controller + ": "
+        s += self.parent_id
+        return s
+
     def create_get_request(self, params):
         params['controller'] = self.controller
         params['app_id'] = self.s.internets()["app_id"]
@@ -66,6 +71,7 @@ class APIelement:
     def call(self, params):
 
         url = self.create_get_request(params)
+        print(url)
 
         try:
             req = urllib.request.Request(url)

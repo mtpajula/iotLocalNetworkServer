@@ -98,9 +98,13 @@ class Collector:
 
     def create_device(self, ip, root):
         if root["task"] == "onoff":
-            self.devices.append(onoffDevice(ip, root))
+            d = onoffDevice()
+            d.add_root_data(ip, root)
+            self.devices.append(d)
         else:
-            self.devices.append(Device(ip, root))
+            d = Device()
+            d.add_root_data(ip, root)
+            self.devices.append(d)
 
     def __str__(self):
         s = "\nCollector devices:\n"

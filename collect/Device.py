@@ -4,13 +4,16 @@ import json
 
 class Device:
 
+    ip       = "---"
     name     = ""
     task     = ""
     type     = "none"
-    messages = {}
     timeo    = 8
 
-    def __init__(self, ip, root = None):
+    def __init__(self):
+        self.messages = []
+
+    def add_root_data(self, ip, root = None):
         self.ip = ip
         if root != None:
             self.name = root["device"]
@@ -53,7 +56,8 @@ class Device:
         return s
 
     def receive_command(self, category, command):
-        self.send_message("command not found",command)
+        self.send_message("command not found", command)
 
     def send_message(self, title, desc):
-        self.messages[title] = desc
+        self.messages.append({"title":title,"desc":desc})
+        #self.messages[title] = desc

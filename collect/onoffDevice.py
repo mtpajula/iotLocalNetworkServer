@@ -5,8 +5,8 @@ class onoffDevice(Device):
 
     switch = False
 
-    def __init__(self, ip, root):
-        super().__init__(ip, root)
+    def __init__(self):
+        super().__init__()
         self.type = "onoffDevice"
 
     def set(self, sw):

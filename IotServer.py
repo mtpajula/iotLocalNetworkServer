@@ -18,20 +18,26 @@ class IotServer:
         self.d.collect_iot()
 
     def send_internets(self):
-        devices =  copy.deepcopy(self.d.c.devices)
-        devices.append(self.d)
-        self.d.i.send(devices)
+        #devices =  copy.copy(self.d.c.devices)
+        #devices =  copy.deepcopy(self.d.c.devices)
+        #devices.append(self.d)
+        #self.d.i.send(devices)
+        self.d.i.send(self.d.c.devices)
+        self.d.i.send([self.d])
 
     def get_internets(self):
-        devices = copy.deepcopy(self.d.c.devices)
-        devices.append(self.d)
-        self.d.i.get(devices)
+        #devices = copy.copy(self.d.c.devices)
+        #devices.append(self.d)
+        self.d.i.get(self.d.c.devices)
+        self.d.i.get([self.d])
 
     def loop(self):
         # TODO if new commands, loop faster
         # TODO better print
         # example: commands per dev?
         # TODO collect devices once a day or in case of commands
+        # TODO Fix mess that was left behind after fixing inheritancebug
+        # (all devices shared messages-list)
 
         self.d.i.get_devices()
         self.load_data()

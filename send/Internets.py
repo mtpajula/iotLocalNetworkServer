@@ -23,12 +23,17 @@ class Internets:
         print(self.__str__())
 
     def send(self, devices):
+        for d in devices:
+            print(d.name + " messages")
+            for m in d.messages:
+                print(" sending queue: " + m["title"] + ", " + m["desc"])
+
         print("sending messages")
         for d in devices:
             if d.name in self.messages:
                 for m in d.messages:
-                    print("SEND: " + m + ", " + d.messages[m])
-                    self.messages[d.name].create_data(m, d.messages[m])
+                    print("SEND: " + m["title"] + ", " + m["desc"])
+                    self.messages[d.name].create_data(m["title"], m["desc"])
                 d.messages.clear()
 
     def get(self, devices):
@@ -46,5 +51,5 @@ class Internets:
     def __str__(self):
         s = "\nInternets devices:\n"
         for key, value in self.messages.items():
-            s += "\t" + key + "\t\t" + value.description + "\n"
+            s += "\t" + key + "\t\t" + value.parent_id + " " + value.description + "\n"
         return s
