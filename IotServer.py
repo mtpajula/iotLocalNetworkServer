@@ -56,4 +56,7 @@ class IotServer:
 if __name__ == '__main__':
     print("-- IotServer --")
     iot = IotServer()
-    iot.loop()
+    #iot.loop()
+    iot.d.i.get_devices()
+    iot.load_data()
+    iot.run()

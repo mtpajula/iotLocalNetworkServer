@@ -5,7 +5,8 @@ from pathlib import Path
 
 class Settings:
 
-    data = {}
+    data      = {}
+    directory =  os.path.abspath(os.path.dirname(__file__))
 
     def collector(self):
         return self.data["collector"]
@@ -14,7 +15,7 @@ class Settings:
         return self.data["internets"]
 
     def is_file(self, filepath):
-        filepath = os.getcwd() + "/" + filepath
+        filepath = self.directory + "/" + filepath
         f = Path(filepath)
 
         if f.is_file():
@@ -26,7 +27,7 @@ class Settings:
         self.data = self.read(filepath)
 
     def read(self, filepath):
-        filepath = os.getcwd() + "/" + filepath
+        filepath = self.directory + "/" + filepath
 
         print ("Reading from: " + filepath)
 
@@ -41,7 +42,7 @@ class Settings:
         return out
 
     def write(self, filepath, data):
-        filepath = os.getcwd() + "/" + filepath
+        filepath = self.directory + "/" + filepath
 
         print ("Writing to: " + filepath)
 

@@ -21,7 +21,7 @@ class Collector:
 
     def load(self):
         self.devices.clear()
-
+        
         if not self.s.is_file(self.filepath):
             print("No saved collector data")
             self.start()
