@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
-import sqlite3
+import MySQLdb
+#import sqlite3
 from .DbObject import *
 
 class DbConnection:
 
     def __init__(self, settings):
         self.s    = settings
-        self.conn = sqlite3.connect(self.s.connector()["sqlite3"])
+        #self.conn = sqlite3.connect(self.s.connector()["sqlite3"])
+        self.conn = MySQLdb.connect(host=self.s.connector()["host"],    # your host, usually localhost
+                     user=self.s.connector()["user"],         # your username
+                     passwd=self.s.connector()["passwd"],  # your password
+                     db=self.s.connector()["db"])        # name of the data base
 
     def get(self, table, id = None):
         sql = ''

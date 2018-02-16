@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sqlite3
 from .DbObject import *
 from .DbConnection import DbConnection
 import time
