@@ -6,7 +6,7 @@ class DbObject:
         self.id      = ""
         self.device  = ""
         self.payload = ""
-        self.time    = ""
+        self.time    = None
         self.address = ""
         self.name    = ""
         self.task    = ""
@@ -16,7 +16,8 @@ class DbObject:
         s = str(self.id)  + " "
         s += self.device  + " "
         s += self.payload + " "
-        s += self.time.strftime("%Y-%m-%d %H:%M:%S") + " "
+        if self.time != None:
+            s += self.time.strftime("%Y-%m-%d %H:%M:%S") + " "
         s += self.address + " "
         s += self.name    + " "
         s += self.task    + " "
