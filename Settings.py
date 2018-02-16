@@ -14,6 +14,9 @@ class Settings:
     def internets(self):
         return self.data["internets"]
 
+    def connector(self):
+        return self.data["connector"]
+
     def is_file(self, filepath):
         filepath = self.directory + "/" + filepath
         f = Path(filepath)
@@ -22,14 +25,13 @@ class Settings:
             return True
         return False
 
-
     def load(self, filepath):
         self.data = self.read(filepath)
 
     def read(self, filepath):
         filepath = self.directory + "/" + filepath
 
-        print ("Reading from: " + filepath)
+        print ("\nSettings from: " + filepath + "\n")
 
         out = {}
 

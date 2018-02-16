@@ -5,5 +5,8 @@
     },
     "collector" : {
         "ip_range" : "192.168.1.100-200"
+    },
+    "connector" : {
+        "sqlite3" : ".../iot.sqlite3"
     }
 }

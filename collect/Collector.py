@@ -8,7 +8,6 @@ from .onoffDevice import *
 class Collector:
 
     devices  = []
-    filepath = "data/collector.json"
     timeo    = 8
     virtual  = "/virtualdevs"
 
@@ -19,28 +18,14 @@ class Collector:
         ips = self.get_ip_list()
         self.find_iot_devices(ips)
 
-    def load(self):
+    def put(self, devs):
         self.devices.clear()
-        
-        if not self.s.is_file(self.filepath):
-            print("No saved collector data")
-            self.start()
-            return
 
-        data = self.s.read(self.filepath)
-
-        for d in data:
+        for d in devs:
             self.create_device(d["ip"], d["root"])
 
-    def save(self):
-        data = []
-        for d in self.devices:
-            data.append(d.get_dict())
-
-        self.s.write(self.filepath, data)
-
     def get_ip_list(self):
-        print("Collecting iot data")
+        print("Collecting ip list\n")
         nm = nmap.PortScanner()
         nm.scan(self.s.collector()["ip_range"], arguments="-sP")
         print(nm.all_hosts())
@@ -48,7 +33,7 @@ class Collector:
 
     def request_json(self, addr):
         url = "http://" + addr
-        print("requesting json from " + url)
+        #print("requesting json from " + url)
 
         try:
             req = urllib.request.Request(url)
@@ -61,7 +46,7 @@ class Collector:
             return True, out
             #print(out)
             if "device" in out:
-                print(" == device found == ")
+                #print(" == device found == ")
                 return True, out
         except Exception as e:
             return False, "json"
@@ -71,18 +56,18 @@ class Collector:
         status, out = self.request_json(vurl)
         if status:
             if "devices" in out:
-                print(" == virtual iot server found == ")
+                #print(" == virtual iot server found == ")
                 for dev in out["devices"]:
                     self.find_iot_device(vurl + "/" + dev)
-        else:
-            print(out)
+        #else:
+        #    print(out)
 
     def find_iot_device(self, addr):
         status, out = self.request_json(addr)
 
         if status:
             if "device" in out:
-                print(" == device found == ")
+                #print(" == device found == ")
                 self.create_device(addr, out)
         else:
             if out == "json":
@@ -93,8 +78,6 @@ class Collector:
 
         for ip in ips:
             self.find_iot_device(ip)
-
-        self.save()
 
     def create_device(self, ip, root):
         if root["task"] == "onoff":
@@ -107,7 +90,7 @@ class Collector:
             self.devices.append(d)
 
     def __str__(self):
-        s = "\nCollector devices:\n"
+        s = "Collector devices:\n"
         for d in self.devices:
             s += "\t" + d.__str__() + "\n"
         return s

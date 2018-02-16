@@ -2,61 +2,111 @@
 from IotServerDevice import *
 from time import sleep
 import copy
+import sys
 
 class IotServer:
 
     wait = 10
 
     def __init__(self):
-        print("\nIotServer init\n")
         self.d = IotServerDevice()
 
-    def load_data(self):
-        self.d.collect_iot(True)
+    def printer(self, category, message):
+        if category == "t1":
+            print("\n")
+            print(message)
+            print("======================================")
+        elif category == "t2":
+            print("\n")
+            print(message)
+            print("--------------------------------------")
+        elif category == "p":
+            print(message)
+        elif category == "error":
+            print(" ! ERROR: " + message)
+
+    '''
+    run in terminal command mode
+    Example: IotServer.py device=server command="reset devices"
+    '''
+    def send_command(self, device, command):
+        self.printer("p","Run in terminal command mode")
+
+        #self.printer("t1","Load devices from db")
+        #self.d.collect_iot(True)
+        for d in self.d.c.devices:
+            if d.name == device:
+                d.receive_command('command', command)
+        if self.d.name == device:
+            self.d.receive_command('command', command)
+
+        # Send messages to db
+        self.printer("t1","Send messages to db")
+        self.d.db.set_messages(self.d.c.devices)
+        self.d.db.set_messages([self.d])
 
     def collect_data(self):
         self.d.collect_iot()
+        self.d.db.set_devices(self.d.c.devices)
 
-    def send_internets(self):
-        #devices =  copy.copy(self.d.c.devices)
-        #devices =  copy.deepcopy(self.d.c.devices)
-        #devices.append(self.d)
-        #self.d.i.send(devices)
-        self.d.i.send(self.d.c.devices)
-        self.d.i.send([self.d])
+    '''
+    run in normal mode or schedule mode
+    '''
+    def run(self, schedule = False):
+        if schedule:
+            self.printer("p","Run in schedule mode")
+        else:
+            self.printer("p","Run in normal mode")
 
-    def get_internets(self):
-        #devices = copy.copy(self.d.c.devices)
-        #devices.append(self.d)
-        self.d.i.get(self.d.c.devices)
-        self.d.i.get([self.d])
+        # Get devs from db
+        #self.printer("t1","Load devices from db")
+        self.d.collect_iot(True)
 
-    def loop(self):
-        # TODO if new commands, loop faster
-        # TODO better print
-        # example: commands per dev?
-        # TODO collect devices once a day or in case of commands
-        # TODO Fix mess that was left behind after fixing inheritancebug
-        # (all devices shared messages-list)
+        # if schedule run
+        if schedule:
+            # Get scheduled commands
+            self.printer("t1","Get scheduled commands")
+            self.d.db.get_schedules(self.d.c.devices)
+            self.d.db.get_schedules([self.d])
 
-        self.d.i.get_devices()
-        self.load_data()
+            # save statuses to db
+            self.printer("t1","Save statuses to db")
+            self.d.db.set_status(self.d.c.devices)
+            self.d.db.set_status([self.d])
+        else:
+            # if command run
+            # get commands
+            self.printer("t1","Get commands")
+            self.d.db.get_commands(self.d.c.devices)
+            self.d.db.get_commands([self.d])
 
-        while True:
-            print("\nsleep\n")
-            sleep(self.wait)
-            self.run()
+        # Send messages to db
+        self.printer("t1","Send messages to db")
+        self.d.db.set_messages(self.d.c.devices)
+        self.d.db.set_messages([self.d])
 
-    def run(self):
-        self.get_internets()
-        self.send_internets()
-        # TODO filter internets commands
+
 
 
 if __name__ == '__main__':
-    print("-- IotServer --")
     iot = IotServer()
-    #iot.loop()
-    iot.d.i.get_devices()
-    iot.load_data()
+
+    if "schedule" in sys.argv:
+        iot.run(True)
+        sys.exit()
+
+    c = None
+    d = None
+    for ar in sys.argv:
+        if "command=" in ar:
+            arp = ar.split("=")
+            c = arp[1]
+        elif "device=" in ar:
+            arp = ar.split("=")
+            d = arp[1]
+
+    if c != None and d != None:
+        iot.send_command(d,c)
+        sys.exit()
+
     iot.run()

@@ -25,13 +25,13 @@ class Device:
     def call(self, params):
 
         url = "http://" + self.ip + "/" + params
-        print(url)
+        #print(url)
 
         try:
             req = urllib.request.Request(url)
             r = urllib.request.urlopen(req, timeout = self.timeo).read()
             m = json.loads(r.decode('utf-8'))
-            print(m)
+            #print(m)
             return m
         except Exception as e:
             print(str(e))

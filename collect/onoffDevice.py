@@ -29,7 +29,6 @@ class onoffDevice(Device):
         return "off"
 
     def receive_command(self, category, command):
-
         if command == "off":
             self.set(False)
         elif command == "on":
