@@ -16,7 +16,7 @@ class DbObject:
         s = str(self.id)  + " "
         s += self.device  + " "
         s += self.payload + " "
-        s += self.time    + " "
+        s += self.time.strftime("%Y-%m-%d %H:%M:%S") + " "
         s += self.address + " "
         s += self.name    + " "
         s += self.task    + " "
