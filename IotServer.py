@@ -45,6 +45,9 @@ class IotServer:
         self.d.db.set_messages(self.d.c.devices)
         self.d.db.set_messages([self.d])
 
+    def close_db(self):
+        self.d.db.con.conn.close()
+
     def collect_data(self):
         self.d.collect_iot()
         self.d.db.set_devices(self.d.c.devices)
@@ -73,12 +76,11 @@ class IotServer:
             self.printer("t1","Save statuses to db")
             self.d.db.set_status(self.d.c.devices)
             self.d.db.set_status([self.d])
-        else:
-            # if command run
-            # get commands
-            self.printer("t1","Get commands")
-            self.d.db.get_commands(self.d.c.devices)
-            self.d.db.get_commands([self.d])
+
+        # get commands
+        self.printer("t1","Get commands")
+        self.d.db.get_commands(self.d.c.devices)
+        self.d.db.get_commands([self.d])
 
         # Send messages to db
         self.printer("t1","Send messages to db")
@@ -93,6 +95,7 @@ if __name__ == '__main__':
 
     if "schedule" in sys.argv:
         iot.run(True)
+        iot.close_db()
         sys.exit()
 
     c = None
@@ -107,6 +110,8 @@ if __name__ == '__main__':
 
     if c != None and d != None:
         iot.send_command(d,c)
+        iot.close_db()
         sys.exit()
 
     iot.run()
+    iot.close_db()
