@@ -1,18 +1,19 @@
 # iotLocalNetworkServer
 
-Local network server code to controll iot-devices and communicate with cloud api. Searches devices from local network, reads commands and sends messages to/from cloud api.
+Local network server code to controll iot-devices. Searches devices from local network, reads commands and sends messages to/from database.
 
 Prerequisites:
 
- * python3
  * nmap
+ * python3
+ * python3-mysqldb
+ * python3-nmap
 
 Install:
 
     sudo apt install python3-mysqldb
-    sudo apt install python3-pip
     sudo apt install nmap
-    pip3 install python-nmap
+    sudo apt install python3-nmap
 
 Running:
 
