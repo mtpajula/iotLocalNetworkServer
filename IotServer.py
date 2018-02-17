@@ -32,7 +32,7 @@ class IotServer:
     def send_command(self, device, command):
         self.printer("p","Run in terminal command mode")
 
-        self.printer("t1","Load devices from db")
+        #self.printer("t1","Load devices from db")
         self.d.collect_iot(True)
         for d in self.d.c.devices:
             if d.name == device:
