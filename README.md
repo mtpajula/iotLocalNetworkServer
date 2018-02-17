@@ -9,6 +9,7 @@ Prerequisites:
 
 Install:
 
+    sudo apt install python3-mysqldb
     sudo apt install python3-pip
     sudo apt install nmap
     pip3 install python-nmap
