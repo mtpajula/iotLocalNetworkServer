@@ -14,6 +14,13 @@ Prerequisites:
     sudo apt install python3-mysqldb
     sudo apt install nmap
     sudo apt install python3-nmap
+    
+### Setting up
+
+ 1. cp data/settings.demo.json data/settings.json
+ 2. Open data/settings.json
+ 3. settings.json: insert your MySQL-login -information
+ 4. settings.json: Change nmap ip-range settings if needed
 
 ## Running
 
