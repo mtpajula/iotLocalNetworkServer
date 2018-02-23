@@ -42,9 +42,9 @@ class Connector:
 
     def get_schedules(self, devs):
         dbos = self.con.get('schedule')
-        self.run_command(devs, dbos)
+        self.run_command(devs, dbos, 'schedule')
 
-    def run_command(self, devs, dbos):
+    def run_command(self, devs, dbos, table = 'command'):
         for d in devs:
             for dbo in dbos:
                 if dbo.start != "":
@@ -53,8 +53,8 @@ class Connector:
 
                 if d.name == dbo.device:
                     print(dbo)
-                    d.receive_command('command', dbo.payload)
-                    self.con.delete('command', dbo)
+                    d.receive_command(table, dbo.payload)
+                    self.con.delete(table, dbo)
 
     def set_messages(self, devs):
         for d in devs:
