@@ -25,8 +25,13 @@ Prerequisites:
 ## Running
 
     python3 IotServer.py                                      # Normal mode
+    python3 IotServer.py status                               # status mode
     python3 IotServer.py schedule                             # Schedule mode
     python3 IotServer.py device=server command"reset devices" # Command mode
+    
+ * Normal mode runs commands and sends messages (php-api can run)
+ * Status mode saves device statuses to db and sends messages (ex. cron every hour)
+ * Schedule mode runs schedules, commands and saves messages (ex. cron every minute)
 
 ## About python-nmap
 
