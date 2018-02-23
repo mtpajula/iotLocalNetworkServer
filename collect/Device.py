@@ -57,7 +57,8 @@ class Device:
 
     def receive_command(self, category, command):
         if command == "status":
-            self.send_message("status", self.get_status())
+            desc = json.dumps(self.get_status())
+            self.send_message("status", desc)
             return
         self.send_message("command not found", command)
 
