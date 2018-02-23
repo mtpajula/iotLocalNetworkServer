@@ -61,7 +61,10 @@ class Connector:
             for m in d.messages:
                 dbo  = DbObject()
                 dbo.device  = d.name
-                dbo.payload = m["title"] + ": " + m["desc"]
+                if m["title"] != "":
+                    dbo.payload = m["title"] + ": " + m["desc"]
+                else:
+                    dbo.payload = m["desc"]
                 print(dbo)
                 self.con.post('message', dbo)
 
