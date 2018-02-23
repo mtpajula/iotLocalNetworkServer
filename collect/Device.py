@@ -56,6 +56,9 @@ class Device:
         return s
 
     def receive_command(self, category, command):
+        if command == "status":
+            self.send_message("status", self.get_status())
+            return
         self.send_message("command not found", command)
 
     def send_message(self, title, desc):

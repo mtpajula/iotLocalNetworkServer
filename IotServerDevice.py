@@ -49,6 +49,6 @@ class IotServerDevice(Device):
 
         if command == "reset devices":
             self.collect_iot()
-            self.send_message("iot device reset", "devices: " + str(len(self.c.devices)+1))
+            self.send_message("iot device reset", "devices found " + str(len(self.c.devices)+1))
         else:
             super(IotServerDevice, self).receive_command(category, command)

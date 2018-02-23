@@ -31,11 +31,10 @@ class onoffDevice(Device):
     def receive_command(self, category, command):
         if command == "off":
             self.set(False)
+            self.send_message("switched", self.switch_str())
         elif command == "on":
             self.set(True)
-        elif command == "status":
-            self.get_state()
-            self.send_message("device status", self.switch_str())
+            self.send_message("switched", self.switch_str())
         elif command == "info":
             self.send_message("device info", self.__str__())
         else:
