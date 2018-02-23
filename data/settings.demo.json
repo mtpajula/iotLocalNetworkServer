@@ -1,13 +1,8 @@
 {
-    "internets" : {
-        "address" : "http://api/?",
-        "app_id" : "..."
-    },
     "collector" : {
         "ip_range" : "192.168.1.100-200"
     },
     "connector" : {
-        "sqlite3" : ".../iot.sqlite3",
         "host" : "localhost",
         "user" : "john",
         "passwd" : "megajonhy",

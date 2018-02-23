@@ -11,9 +11,6 @@ class Settings:
     def collector(self):
         return self.data["collector"]
 
-    def internets(self):
-        return self.data["internets"]
-
     def connector(self):
         return self.data["connector"]
 
