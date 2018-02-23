@@ -39,7 +39,3 @@ class onoffDevice(Device):
             self.send_message("device info", self.__str__())
         else:
             super(onoffDevice, self).receive_command(category, command)
-
-    def  __str__(self):
-        s = super(onoffDevice, self).__str__()
-        return s + " Status: " + self.switch_str()
